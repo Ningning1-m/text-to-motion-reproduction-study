@@ -1,6 +1,31 @@
-# Byte-compiled / optimized / DLL files
+# Python
 __pycache__/
 *.py[cod]
 *$py.class
 
+# Local environments and editor files
+.env
+.venv/
+venv/
+.idea/
+
+# Local model checkpoints and normalization data
+checkpoints/*
+!checkpoints/.gitkeep
+*.tar
+*.pt
+*.pth
+*.ckpt
+
+# Generated motion files and animations
 eval_results/*
+*.mp4
+*.gif
+
+# Local analysis scratch files
+results.csv
+auto_metrics.csv
+*.log
+
+# Python bytecode inside custom experiment folders
+project/**/__pycache__/

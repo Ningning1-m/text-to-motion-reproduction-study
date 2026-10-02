@@ -1,0 +1,4 @@
+a person walks forward and raises the right hand
+a person walks backward
+a person turns left and sits down
+a person stands up, walks forward, turns around, and sits down

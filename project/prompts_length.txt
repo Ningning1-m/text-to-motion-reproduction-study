@@ -1,0 +1,4 @@
+a person jumps
+a person walks forward
+a person walks forward and turns left
+a person stands up, walks forward, turns around, and sits down

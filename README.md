@@ -1,139 +1,259 @@
-# Generating Diverse and Natural 3D Human Motions from Text (CVPR 2022)
-## [[Project Page]](https://ericguo5513.github.io/text-to-motion) [[Paper]](https://openaccess.thecvf.com/content/CVPR2022/papers/Guo_Generating_Diverse_and_Natural_3D_Human_Motions_From_Text_CVPR_2022_paper.pdf)
+# Text-to-Motion Reproduction Study
 
-![teaser_image](https://github.com/EricGuo5513/text-to-motion/blob/main/docs/teaser_image.png)
-  
-  Given a textual description for example, *"the figure rises from a lying position and walks in a counterclockwise circle, and then lays back down the ground"*, our approach generates a diverse set of 3d human motions that are faithful to the provided text.
-  
-## Python Virtual Environment
+This repository documents a local reproduction study based on:
 
-Anaconda is recommended to create this virtual environment.
-  
-  ```sh
-  conda create -f environment.yaml
-  conda activate text2motion_pub
-  ```
-  
-If you cannot successfully create the environment, here is a list of required libraries:
-  ```
-  Python = 3.7.9   # Other version may also work but are not tested.
-  PyTorch = 1.6.0 (conda install pytorch==1.6.0 torchvision==0.7.0 -c pytorch)  #Other version may also work but are not tested.
-  scipy
-  numpy
-  tensorflow       # For use of tensorboard only
-  spacy
-  tqdm
-  ffmpeg = 4.3.1   # Other version may also work but are not tested.
-  matplotlib = 3.3.1
-  ```
-  
-  After all, if you want to generate 3D motions from customized raw texts, you still need to install the language model for spacy. 
-  ```sh
-  python -m spacy download en_core_web_sm
-  ```
-  
-  ## Download Data & Pre-trained Models
-  
-  **If you just want to play our pre-trained models, you don't need to download datasets.**
-  ### Datasets
-  We are using two 3D human motion-language dataset: HumanML3D and KIT-ML. For both datasets, you could find the details as well as download link [[here]](https://github.com/EricGuo5513/HumanML3D).   
-  Please note you don't need to clone that git repository, since all related codes have already been included in current git project.
-  
-  Download and unzip the dataset files -> Create a dataset folder -> Place related data files in dataset folder:
-  ```sh
-  mkdir ./dataset/
-  ```
-  Take HumanML3D for an example, the file directory should look like this:  
-  ```
-  ./dataset/
-  ./dataset/HumanML3D/
-  ./dataset/HumanML3D/new_joint_vecs/
-  ./dataset/HumanML3D/texts/
-  ./dataset/HumanML3D/Mean.mpy
-  ./dataset/HumanML3D/Std.npy
-  ./dataset/HumanML3D/test.txt
-  ./dataset/HumanML3D/train.txt
-  ./dataset/HumanML3D/train_val.txt
-  ./dataset/HumanML3D/val.txt  
-  ./dataset/HumanML3D/all.txt 
-  ```
- ### Pre-trained Models
-  Create a checkpoint folder to place pre-traine models:
-  ```sh
-  mkdir ./checkpoints
-  ```
-    
- #### Download models for HumanML3D from [[here]](https://drive.google.com/file/d/1IgrFCnxeg4olBtURUHimzS03ZI0df_6W/view?usp=sharing). Unzip and place them under checkpoint directory, which should be like
-```
-./checkpoints/t2m/
-./checkpoints/t2m/Comp_v6_KLD01/           # Text-to-motion generation model
-./checkpoints/t2m/Decomp_SP001_SM001_H512/ # Motion autoencoder
-./checkpoints/t2m/length_est_bigru/        # Text-to-length sampling model
-./checkpoints/t2m/text_mot_match/          # Motion & Text feature extractors for evaluation
- ```
- #### Download models for KIT-ML [[here]](https://drive.google.com/file/d/12liZW5iyvoybXD8eOw4VanTgsMtynCuU/view?usp=drive_link). Unzip and place them under checkpoint directory.
-    
- ## Training Models
- 
- All intermediate meta files/animations/models will be saved to checkpoint directory under the folder specified by argument "--name".
- ### Training motion autoencoder
- #### HumanML3D
-```sh
-python train_decomp_v3.py --name Decomp_SP001_SM001_H512 --gpu_id 0 --window_size 24 --dataset_name t2m
-```
-#### KIT-ML
-```sh
-python train_decomp_v3.py --name Decomp_SP001_SM001_H512 --gpu_id 0 --window_size 24 --dataset_name kit
+> Generating Diverse and Natural 3D Human Motions from Text, CVPR 2022.
+
+The upstream implementation and paper are available here:
+
+- [Official implementation](https://github.com/EricGuo5513/text-to-motion)
+- [Project page](https://ericguo5513.github.io/text-to-motion)
+- [CVPR 2022 paper](https://openaccess.thecvf.com/content/CVPR2022/papers/Guo_Generating_Diverse_and_Natural_3D_Human_Motions_From_Text_CVPR_2022_paper.pdf)
+
+This repository is a learning-oriented reproduction and analysis project. It
+does not claim to reproduce every official benchmark result.
+
+## What This Project Does
+
+The official pretrained model maps a natural-language description to a 3D
+human motion:
+
+```text
+text prompt
+    -> spaCy preprocessing and word/POS features
+    -> text encoder
+    -> motion-length estimator
+    -> text-to-motion generator
+    -> normalized 263-D motion representation
+    -> inverse normalization
+    -> 22-joint XYZ motion
+    -> MP4 animation
 ```
 
-### Train text2length model:
-#### HumanML3D
-```sh
-python train_length_est.py --name length_est_bigru --gpu_id 0 --dataset_name t2m
-```
-#### KIT-ML
-```sh
-python train_length_est.py --name length_est_bigru --gpu_id 0 --dataset_name kit
-```
-### Training text2motion model:
-#### HumanML3D
-```sh
-python train_comp_v6.py --name Comp_v6_KLD01 --gpu_id 0 --lambda_kld 0.01 --dataset_name t2m
-```
-#### KIT-ML
-```sh
-python train_comp_v6.py --name Comp_v6_KLD005 --gpu_id 0 --lambda_kld 0.005 --dataset_name kit
-```
-### Training motion & text feature extractors:
-#### HumanML3D
-```sh
-python train_tex_mot_match.py --name text_mot_match --gpu_id 1 --batch_size 8 --dataset_name t2m
-```
-#### KIT-ML
-```sh
-python train_tex_mot_match.py --name text_mot_match --gpu_id 1 --batch_size 8 --dataset_name kit
-```
-    
-## Generating and Animating 3D Motions (HumanML3D)
-#### Sampling results from test sets
-```sh
-python eval_comp_v6.py --name Comp_v6_KLD01 --est_length --repeat_time 3 --num_results 10 --ext default --gpu_id 1
-```
-where *--est_length* asks the model to use sampled motion lengths for generation, *--repeat_time* gives how many sampling rounds are carried out for each description. This script will results in 3x10 animations under directory *./eval_results/t2m/Comp_v6_KLD01/default/*.
+This study adds three small experiments:
 
-#### Sampling results from customized descriptions
-```sh
-python gen_motion_script.py --name Comp_v6_KLD01 --text_file input.txt --repeat_time 3 --ext customized --gpu_id 1
+1. **Diversity**: generate multiple motions from the same text.
+2. **Direction**: compare forward, backward, left, and right prompts.
+3. **Length**: compare generated durations for short and compositional prompts.
+
+It also contains a small rule-based **Action Primitive JSON** interface. This
+interface is a project extension, not a component of the original paper.
+
+## Repository Structure
+
+```text
+gen_motion_script.py          Official inference entry point
+data/                         Dataset and raw-text loading
+networks/                     Model modules and trainers
+scripts/                      Motion representation recovery
+utils/                        Word vectors, plotting, and utilities
+options/                      Command-line options
+project/                      Custom experiments and analysis scripts
+project/prompts_*.txt         Experiment prompts
+project/results/              CSV summaries and Action Primitive JSON
+project/figures/              Experiment figures
+docs/code_walkthrough.md      Inference pipeline explanation
+docs/analysis_code_line_by_line.md
+                              Detailed analysis-code walkthrough
+docs/reproduction_summary.md  Results and interpretation
 ```
-This will generate 3 animated motions for each description given in text_file *./input.txt*.
 
-If you find problem with installing ffmpeg, you may not be able to animate 3d results in mp4. Try gif instead.
+Model checkpoints and generated videos are intentionally excluded from Git.
+They are downloaded or generated locally.
 
-## Quantitative Evaluations
-```sh
-python final_evaluation.py 
+## Environment
+
+The experiments were run on Windows with:
+
+```text
+Conda environment: motion-study
+Python:            3.8
+PyTorch:           2.0.1
+GPU:               NVIDIA CUDA GPU
+spaCy:             3.4.4
+matplotlib:        3.3.1
 ```
-This will evaluate the model performance on HumanML3D dataset by default. You could also run on KIT-ML dataset by uncommenting certain lines in *./final_evaluation.py*. The statistical results will saved to *./t2m_evaluation.log*.
 
-### Misc
- Contact Chuan Guo at cguo2@ualberta.ca for any questions or comments.
+Create and activate the environment:
+
+```bat
+conda create -n motion-study python=3.8 -y
+conda activate motion-study
+```
+
+Install the main packages. The exact PyTorch command depends on the local
+CUDA setup; the study used the CUDA 11.8 wheel when the network allowed it:
+
+```bat
+pip install torch==2.0.1 torchvision==0.15.2 torchaudio==2.0.2
+conda install -c conda-forge spacy=3.4.4 -y
+conda install numpy=1.23.5 scipy tqdm matplotlib=3.3.1 -y
+```
+
+Install the spaCy English model:
+
+```bat
+python -m spacy download en_core_web_sm
+```
+
+If the network cannot access the spaCy model registry, download the compatible
+wheel on a networked machine and install it locally.
+
+## Pretrained Models
+
+Download the HumanML3D pretrained checkpoints from the upstream project and
+place them under:
+
+```text
+checkpoints/t2m/Comp_v6_KLD01/
+checkpoints/t2m/Decomp_SP001_SM001_H512/
+checkpoints/t2m/length_est_bigru/
+checkpoints/t2m/text_mot_match/
+```
+
+The normalization files required by the analysis scripts are:
+
+```text
+checkpoints/t2m/Comp_v6_KLD01/meta/mean.npy
+checkpoints/t2m/Comp_v6_KLD01/meta/std.npy
+```
+
+Do not commit checkpoint files to GitHub.
+
+## Minimal Inference
+
+From the repository root:
+
+```bat
+conda activate motion-study
+python gen_motion_script.py ^
+  --name Comp_v6_KLD01 ^
+  --text_file input_single.txt ^
+  --repeat_times 1 ^
+  --ext customized ^
+  --gpu_id 0
+```
+
+Generated files are written under:
+
+```text
+eval_results/t2m/Comp_v6_KLD01/customized/
+```
+
+The `.npy` motion representation is converted back to joint coordinates and
+rendered as an MP4 by the official inference script.
+
+## Run the Experiments
+
+Generate several samples for the direction experiment:
+
+```bat
+python gen_motion_script.py ^
+  --name Comp_v6_KLD01 ^
+  --text_file project/prompts_direction.txt ^
+  --repeat_times 5 ^
+  --ext exp_direction_v1 ^
+  --gpu_id 0
+```
+
+Analyze the generated motions:
+
+```bat
+python -m project.analyze_direction
+```
+
+Run the length experiment:
+
+```bat
+python gen_motion_script.py ^
+  --name Comp_v6_KLD01 ^
+  --text_file project/prompts_length.txt ^
+  --repeat_times 5 ^
+  --ext exp_length_v1 ^
+  --gpu_id 0
+
+python -m project.analyze_length
+```
+
+Run the diversity experiment:
+
+```bat
+python gen_motion_script.py ^
+  --name Comp_v6_KLD01 ^
+  --text_file project/prompts_diversity.txt ^
+  --repeat_times 5 ^
+  --ext exp_diversity_v1 ^
+  --gpu_id 0
+
+python -m project.analyze_diversity
+```
+
+The analysis scripts first undo feature normalization:
+
+```text
+original_motion = normalized_motion * std + mean
+```
+
+They then call the official `recover_from_ric()` function to obtain
+`[T, 22, 3]` joint coordinates before computing exploratory statistics.
+
+## Action Primitive Interface
+
+Run:
+
+```bat
+python -m project.action_primitives
+```
+
+The result is saved to:
+
+```text
+project/results/action_primitives.json
+```
+
+This parser is intentionally small and rule-based. It does not train a model,
+recognize arbitrary actions, or control a robot.
+
+## Results
+
+The current results and interpretation are documented in:
+
+- [Reproduction summary](docs/reproduction_summary.md)
+- [Code walkthrough](docs/code_walkthrough.md)
+- [Analysis code line-by-line guide](docs/analysis_code_line_by_line.md)
+
+The CSV files and PNG figures are included under `project/results/` and
+`project/figures/`. The custom metrics are exploratory and should not be
+reported as the official CVPR 2022 FID, R-Precision, Matching Score,
+Diversity, or Multimodality benchmark.
+
+## Reproducibility Scope
+
+Included in this study:
+
+- pretrained-model text-to-motion inference;
+- custom prompt generation;
+- multiple-sample diversity analysis;
+- direction-conditioned trajectory analysis;
+- generated-duration analysis;
+- a rule-based action primitive export;
+- code-reading and data-shape documentation.
+
+Not included as a full reproduction:
+
+- retraining all official models;
+- reproducing the complete HumanML3D benchmark table;
+- official FID, R-Precision, Matching Score, and Multimodality evaluation;
+- training a new embodied-agent policy.
+
+## Attribution
+
+The model architecture, pretrained weights, data representation, and core
+inference implementation come from the upstream CVPR 2022 project. This
+repository adds the learning notes, experiments, analysis scripts, and
+interpretation described above.
+
+## License
+
+See the upstream [LICENSE](LICENSE) and the upstream repository for the
+original project terms.

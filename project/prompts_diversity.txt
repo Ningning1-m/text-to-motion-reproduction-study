@@ -1,0 +1,4 @@
+a person walks forward
+a person jumps
+a person sits down
+a person raises the right hand
