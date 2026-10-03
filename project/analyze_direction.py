@@ -1,5 +1,5 @@
 r"""
-Analyze diversity of Text-to-Motion generated samples.
+Analyze direction-conditioned Text-to-Motion generated samples.
 
 Expected project layout:
 E:\motion-research\text-to-motion\

@@ -1,10 +1,11 @@
-torch
-torchvision
-torchaudio
-scipy
+# Install a CUDA-compatible PyTorch build separately when needed.
+torch==2.0.1
+torchvision==0.15.2
+torchaudio==2.0.2
+
 numpy==1.23.5
-# tensorflow==2.11.0
-tensorrt
-spacy
+scipy
+spacy==3.4.4
 tqdm
 matplotlib==3.3.1
+pillow

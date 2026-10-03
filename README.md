@@ -10,8 +10,8 @@ The upstream implementation and paper are available here:
 - [Project page](https://ericguo5513.github.io/text-to-motion)
 - [CVPR 2022 paper](https://openaccess.thecvf.com/content/CVPR2022/papers/Guo_Generating_Diverse_and_Natural_3D_Human_Motions_From_Text_CVPR_2022_paper.pdf)
 
-This repository is a learning-oriented reproduction and analysis project. It
-does not claim to reproduce every official benchmark result.
+This repository is a focused reproduction and analysis project. It does not
+claim to reproduce every official benchmark result.
 
 ## What This Project Does
 
@@ -75,14 +75,15 @@ conda create -n motion-study python=3.8 -y
 conda activate motion-study
 ```
 
-Install the main packages. The exact PyTorch command depends on the local
-CUDA setup; the study used the CUDA 11.8 wheel when the network allowed it:
+Install the Python dependencies:
 
 ```bat
-pip install torch==2.0.1 torchvision==0.15.2 torchaudio==2.0.2
-conda install -c conda-forge spacy=3.4.4 -y
-conda install numpy=1.23.5 scipy tqdm matplotlib=3.3.1 -y
+python -m pip install -r requirements.txt
 ```
+
+For an NVIDIA GPU, install the PyTorch wheel matching your CUDA setup using
+the official PyTorch installation selector if the default wheel is not
+appropriate.
 
 Install the spaCy English model:
 
@@ -211,7 +212,7 @@ Included in this study:
 - multiple-sample diversity analysis;
 - direction-conditioned trajectory analysis;
 - generated-duration analysis;
-- code-reading and data-shape documentation.
+- documented data processing and limitations.
 
 Not included as a full reproduction:
 

@@ -1,9 +1,1 @@
 a person walks forward
-a person walks backward
-a person raises both arms
-a person turns left
-a person walks forward and turns left
-a person walks forward and raises both arms
-a person walks forward, turns left, and raises both arms
-a person walks forward, turns left, raises both arms, and sits down
-a person walks backward, turns right, raises one arm, and then walks forward
