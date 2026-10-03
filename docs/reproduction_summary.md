@@ -96,8 +96,7 @@ checkpoint, and coordinate-processing details.
 ## 5. Limitations
 
 This study uses five samples per prompt and a small hand-written prompt set.
-It does not establish general model accuracy. The Action Primitive JSON
-interface is rule-based and only recognizes a fixed vocabulary.
+It does not establish general model accuracy.
 
 The next rigorous extension would be to use a larger balanced prompt set,
 define an explicit direction classifier from root trajectories, and compare

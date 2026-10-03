@@ -36,9 +36,6 @@ This study adds three small experiments:
 2. **Direction**: compare forward, backward, left, and right prompts.
 3. **Length**: compare generated durations for short and compositional prompts.
 
-It also contains a small rule-based **Action Primitive JSON** interface. This
-interface is a project extension, not a component of the original paper.
-
 ## Repository Structure
 
 ```text
@@ -50,7 +47,7 @@ utils/                        Word vectors, plotting, and utilities
 options/                      Command-line options
 project/                      Custom experiments and analysis scripts
 project/prompts_*.txt         Experiment prompts
-project/results/              CSV summaries and Action Primitive JSON
+project/results/              CSV experiment summaries
 project/figures/              Experiment figures
 docs/code_walkthrough.md      Inference pipeline explanation
 docs/analysis_code_line_by_line.md
@@ -128,7 +125,7 @@ From the repository root:
 conda activate motion-study
 python gen_motion_script.py ^
   --name Comp_v6_KLD01 ^
-  --text_file input_single.txt ^
+  --text_file project/prompts_direction.txt ^
   --repeat_times 1 ^
   --ext customized ^
   --gpu_id 0
@@ -197,23 +194,6 @@ original_motion = normalized_motion * std + mean
 They then call the official `recover_from_ric()` function to obtain
 `[T, 22, 3]` joint coordinates before computing exploratory statistics.
 
-## Action Primitive Interface
-
-Run:
-
-```bat
-python -m project.action_primitives
-```
-
-The result is saved to:
-
-```text
-project/results/action_primitives.json
-```
-
-This parser is intentionally small and rule-based. It does not train a model,
-recognize arbitrary actions, or control a robot.
-
 ## Results
 
 The current results and interpretation are documented in:
@@ -236,7 +216,6 @@ Included in this study:
 - multiple-sample diversity analysis;
 - direction-conditioned trajectory analysis;
 - generated-duration analysis;
-- a rule-based action primitive export;
 - code-reading and data-shape documentation.
 
 Not included as a full reproduction:
