@@ -49,9 +49,6 @@ project/                      Custom experiments and analysis scripts
 project/prompts_*.txt         Experiment prompts
 project/results/              CSV experiment summaries
 project/figures/              Experiment figures
-docs/code_walkthrough.md      Inference pipeline explanation
-docs/analysis_code_line_by_line.md
-                              Detailed analysis-code walkthrough
 docs/reproduction_summary.md  Results and interpretation
 ```
 
@@ -199,8 +196,6 @@ They then call the official `recover_from_ric()` function to obtain
 The current results and interpretation are documented in:
 
 - [Reproduction summary](docs/reproduction_summary.md)
-- [Code walkthrough](docs/code_walkthrough.md)
-- [Analysis code line-by-line guide](docs/analysis_code_line_by_line.md)
 
 The CSV files and PNG figures are included under `project/results/` and
 `project/figures/`. The custom metrics are exploratory and should not be
