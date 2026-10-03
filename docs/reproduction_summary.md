@@ -73,9 +73,8 @@ not directly usable XYZ joint coordinates. The correct analysis pipeline is:
         -> metrics and figures
 ```
 
-The earlier analysis that called `recover_from_ric()` before inverse
-normalization was discarded. The CSV files in this repository were generated
-after applying the correction.
+All reported CSV files were generated after applying inverse normalization
+before calling `recover_from_ric()`.
 
 ## 4. What the Numbers Mean
 

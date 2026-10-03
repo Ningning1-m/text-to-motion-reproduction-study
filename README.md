@@ -113,7 +113,7 @@ checkpoints/t2m/Comp_v6_KLD01/meta/mean.npy
 checkpoints/t2m/Comp_v6_KLD01/meta/std.npy
 ```
 
-Do not commit checkpoint files to GitHub.
+Checkpoint files are kept locally and are not tracked in this repository.
 
 ## Minimal Inference
 
