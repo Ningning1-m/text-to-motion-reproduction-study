@@ -1,21 +1,6 @@
 r"""
 Analyze diversity of Text-to-Motion generated samples.
 
-Expected project layout:
-E:\motion-research\text-to-motion\
-├── project\
-│   ├── prompts_diversity.txt
-│   └── analyze_diversity.py
-└── eval_results\
-    └── t2m\
-        └── Comp_v6_KLD01\
-            └── exp_diversity_v1\
-                └── joints\
-                    ├── C000\
-                    ├── C001\
-                    ├── C002\
-                    └── C003\
-
 This script:
 1. Reads 263-D motion representations from the official generator.
 2. Recovers them to 22-joint XYZ using the official recover_from_ric().
