@@ -194,14 +194,15 @@ They then call the official `recover_from_ric()` function to obtain
 
 ## Results
 
-The current results and interpretation are documented in:
+The experiment results and analysis are documented in the following files:
 
-- [Reproduction summary](docs/reproduction_summary.md)
+Reproduction Summary: an overview of the reproduction setup, evaluation metrics, and main findings.
 
-The CSV files and PNG figures are included under `project/results/` and
-`project/figures/`. The custom metrics are exploratory and should not be
-reported as the official CVPR 2022 FID, R-Precision, Matching Score,
-Diversity, or Multimodality benchmark.
+Detailed Experiment Analysis: video-level observations, quantitative results, trajectory analysis, and identified failure cases.
+
+The corresponding CSV files and PNG figures are available under project/results/ and project/figures/.
+
+The custom metrics are exploratory and are not equivalent to the official CVPR 2022 benchmark metrics, including FID, R-Precision, Matching Score, Diversity, and Multimodality.
 
 ## Reproducibility Scope
 
